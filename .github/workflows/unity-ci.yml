@@ -1,4 +1,4 @@
-name: Build Unity Project
+name: Unity CI
 
 on:
   push:
@@ -9,6 +9,7 @@ jobs:
   build:
     name: Build for Windows
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,7 +20,14 @@ jobs:
           path: Library
           key: Library-${{ hashFiles('**/Assets/**', '**/ProjectSettings/**') }}
 
-      - name: Build project
+      - name: Activate Unity
+        uses: game-ci/unity-activate@v2
+        with:
+          unityVersion: 2022.3.10f1
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+      - name: Build for Windows
         uses: game-ci/unity-builder@v2
         with:
           unityVersion: 2022.3.10f1
