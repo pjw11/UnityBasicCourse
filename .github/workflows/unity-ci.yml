@@ -9,26 +9,27 @@ jobs:
   build:
     name: Build for Windows
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache Library folder
+      - name: Cache Library
         uses: actions/cache@v3
         with:
           path: Library
           key: Library-${{ hashFiles('**/Assets/**', '**/ProjectSettings/**') }}
 
+      - name: Install Unity
+        uses: game-ci/unity-installer@v2
+        with:
+          version: 2022.3.10f1
+
       - name: Activate Unity
         uses: game-ci/unity-activate@v2
-        with:
-          unityVersion: 2022.3.10f1
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
-      - name: Build for Windows
+      - name: Build
         uses: game-ci/unity-builder@v2
         with:
-          unityVersion: 2022.3.10f1
           targetPlatform: StandaloneWindows64
