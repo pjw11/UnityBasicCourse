@@ -1,4 +1,4 @@
-name: Unity CI
+name: Build Unity Project
 
 on:
   push:
@@ -7,24 +7,20 @@ on:
 
 jobs:
   build:
+    name: Build for Windows
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Cache Library folder
-      uses: actions/cache@v3
-      with:
-        path: Library
-        key: Library-${{ hashFiles('**/Assets/**', '**/ProjectSettings/**') }}
+      - name: Cache Library folder
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('**/Assets/**', '**/ProjectSettings/**') }}
 
-    - name: Install Unity
-      uses: game-ci/unity-installer@v2
-      with:
-        version: 2022.3.10f1
-
-    - name: Build for Windows
-      uses: game-ci/unity-builder@v2
-      with:
-        targetPlatform: StandaloneWindows64
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        with:
+          unityVersion: 2022.3.10f1
+          targetPlatform: StandaloneWindows64
